@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useIncidentStats } from '../../../../../lib/queries/incidents';
-import Link from 'next/link';
+import React, { useState } from "react";
+import { useIncidentStats } from "../../../../../lib/queries/incidents";
+import Link from "next/link";
 import {
   Bar,
   BarChart,
@@ -13,16 +13,27 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from 'recharts';
+} from "recharts";
 
-const COLORS = ['#4ade80', '#facc15', '#f87171', '#db2777'];
+const COLORS = ["#4ade80", "#facc15", "#f87171", "#db2777"];
 
 const SeverityPieChart = ({ data }: { data: Record<string, number> }) => {
-  const chartData = Object.entries(data).map(([name, value]) => ({ name, value }));
+  const chartData = Object.entries(data).map(([name, value]) => ({
+    name,
+    value,
+  }));
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>
-        <Pie data={chartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+        <Pie
+          data={chartData}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          outerRadius={80}
+          label
+        >
           {chartData.map((_, index) => (
             <Cell key={index} fill={COLORS[index % COLORS.length]} />
           ))}
@@ -34,7 +45,10 @@ const SeverityPieChart = ({ data }: { data: Record<string, number> }) => {
 };
 
 const StatusBarChart = ({ data }: { data: Record<string, number> }) => {
-  const chartData = Object.entries(data).map(([name, value]) => ({ name, value }));
+  const chartData = Object.entries(data).map(([name, value]) => ({
+    name,
+    value,
+  }));
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={chartData}>
@@ -55,16 +69,22 @@ const StatCard = ({ title, value }: { title: string; value: number }) => (
 );
 
 export default function IncidentsDashboardPage() {
-  // date filter state
-  const [dateRange, setDateRange] = useState<{ start?: string; end?: string }>({});
+  const [dateRange, setDateRange] = useState<{ start?: string; end?: string }>(
+    {}
+  );
   // applied filter state
-  const [appliedFilter, setAppliedFilter] = useState<{ start?: string; end?: string }>({});
+  const [appliedFilter, setAppliedFilter] = useState<{
+    start?: string;
+    end?: string;
+  }>({});
 
   // fetch data based on appliedFilter; initially undefined -> fetches all
-  const { data: stats, isLoading, isError, refetch } = useIncidentStats(
-    appliedFilter.start,
-    appliedFilter.end
-  );
+  const {
+    data: stats,
+    isLoading,
+    isError,
+    refetch,
+  } = useIncidentStats(appliedFilter.start, appliedFilter.end);
 
   const applyFilter = () => {
     setAppliedFilter({ ...dateRange });
@@ -72,12 +92,22 @@ export default function IncidentsDashboardPage() {
     refetch?.();
   };
 
-  if (isLoading) return <div className="p-6 text-gray-700">Loading dashboard...</div>;
-  if (isError || !stats) return <div className="p-6 text-red-600">Failed to load dashboard</div>;
+  if (isLoading)
+    return (
+      <div className="p-6 flex justify-center items-center min-h-[200px]">
+        <div className="bg-white px-6 py-4 rounded-lg shadow-md text-gray-700">
+          Loading incidents...
+        </div>
+      </div>
+    );
+  if (isError || !stats)
+    return <div className="p-6 text-red-600">Failed to load dashboard</div>;
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Incidents Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6 text-white-800">
+        Incidents Dashboard
+      </h1>
 
       <div className="mb-6">
         <Link
@@ -94,8 +124,10 @@ export default function IncidentsDashboardPage() {
           <input
             type="date"
             className="border p-2 rounded"
-            value={dateRange.start || ''}
-            onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
+            value={dateRange.start || ""}
+            onChange={(e) =>
+              setDateRange({ ...dateRange, start: e.target.value })
+            }
           />
         </div>
         <div className="flex gap-2 items-center">
@@ -103,8 +135,10 @@ export default function IncidentsDashboardPage() {
           <input
             type="date"
             className="border p-2 rounded"
-            value={dateRange.end || ''}
-            onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
+            value={dateRange.end || ""}
+            onChange={(e) =>
+              setDateRange({ ...dateRange, end: e.target.value })
+            }
           />
         </div>
 

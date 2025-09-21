@@ -1,17 +1,23 @@
-'use client';
+"use client";
 
-import { useIncidents, useDeleteIncident } from '../../../../lib/queries/incidents';
-import Link from 'next/link';
-import { useState } from 'react';
-import { getStatusClass, getSeverityClass } from '../../../../constants/incidents';
-import { User } from '@prisma/client';
+import {
+  useIncidents,
+  useDeleteIncident,
+} from "../../../../lib/queries/incidents";
+import Link from "next/link";
+import { useState } from "react";
+import {
+  getStatusClass,
+  getSeverityClass,
+} from "../../../../constants/incidents";
+import { User } from "@prisma/client";
 
 export interface IncidentTableRow {
   id: number;
   title: string;
-  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'; // match SEVERITY_LEVELS
-  type: 'ACCIDENT' | 'BREAKDOWN' | 'OTHER'; // match INCIDENT_TYPES
-  status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED'; // match STATUS_OPTIONS
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"; // match SEVERITY_LEVELS
+  type: "ACCIDENT" | "BREAKDOWN" | "OTHER"; // match INCIDENT_TYPES
+  status: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED"; // match STATUS_OPTIONS
   occurredAt?: string;
   car?: {
     id: number;
@@ -33,12 +39,12 @@ export interface IncidentTableRow {
 }
 
 export default function IncidentsPage() {
-  const [selectedSeverity, setSelectedSeverity] = useState<string>('All');
-  const [selectedStatus, setSelectedStatus] = useState<string>('All');
+  const [selectedSeverity, setSelectedSeverity] = useState<string>("All");
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
 
   const { data, isLoading, isError } = useIncidents({
-    severity: selectedSeverity !== 'All' ? selectedSeverity : undefined,
-    status: selectedStatus !== 'All' ? selectedStatus : undefined,
+    severity: selectedSeverity !== "All" ? selectedSeverity : undefined,
+    status: selectedStatus !== "All" ? selectedStatus : undefined,
   });
 
   const deleteMutation = useDeleteIncident();
@@ -55,15 +61,16 @@ export default function IncidentsPage() {
         </div>
       </div>
     );
-  if (isError) return <div className="p-4 text-red-500">Error fetching incidents</div>;
+  if (isError)
+    return <div className="p-4 text-red-500">Error fetching incidents</div>;
 
   const handleDelete = (id: number) => {
-    if (!confirm('Are you sure you want to delete this incident?')) return;
+    if (!confirm("Are you sure you want to delete this incident?")) return;
     setDeletingId(id);
     deleteMutation.mutate(id, {
       onSuccess: () => setDeletingId(null),
       onError: () => {
-        alert('Failed to delete incident.');
+        alert("Failed to delete incident.");
         setDeletingId(null);
       },
     });
@@ -104,11 +111,21 @@ export default function IncidentsPage() {
           }}
           className="border rounded px-3 py-2"
         >
-          <option className='bg-black' value="All">All Severities</option>
-          <option className='bg-black' value="LOW">Low</option>
-          <option className='bg-black' value="MEDIUM">Medium</option>
-          <option className='bg-black' value="HIGH">High</option>
-          <option className='bg-black' value="CRITICAL">CRITICAL</option>
+          <option className="bg-black" value="All">
+            All Severities
+          </option>
+          <option className="bg-black" value="LOW">
+            Low
+          </option>
+          <option className="bg-black" value="MEDIUM">
+            Medium
+          </option>
+          <option className="bg-black" value="HIGH">
+            High
+          </option>
+          <option className="bg-black" value="CRITICAL">
+            CRITICAL
+          </option>
         </select>
 
         <select
@@ -119,12 +136,24 @@ export default function IncidentsPage() {
           }}
           className="border rounded px-3 py-2"
         >
-          <option className='bg-black' value="All">All Statuses</option>
-          <option className='bg-black' value="PENDING">Pending</option>
-          <option className='bg-black' value="IN_PROGRESS">In Progress</option>
-          <option className='bg-black' value="CLOSED">Closed</option>
-          <option className='bg-black' value="RESOLVED">Resolved</option>
-          <option className='bg-black' value="CANCELLED">Cancelled</option>
+          <option className="bg-black" value="All">
+            All Statuses
+          </option>
+          <option className="bg-black" value="PENDING">
+            Pending
+          </option>
+          <option className="bg-black" value="IN_PROGRESS">
+            In Progress
+          </option>
+          <option className="bg-black" value="CLOSED">
+            Closed
+          </option>
+          <option className="bg-black" value="RESOLVED">
+            Resolved
+          </option>
+          <option className="bg-black" value="CANCELLED">
+            Cancelled
+          </option>
         </select>
       </div>
 
@@ -143,11 +172,15 @@ export default function IncidentsPage() {
             </tr>
           </thead>
           <tbody>
-            {paginatedData?.map((incident:IncidentTableRow) => (
+            {paginatedData?.map((incident: IncidentTableRow) => (
               <tr key={incident.id} className="bg-white">
                 <td className="p-3 text-gray-700">{incident.title}</td>
-                <td className="p-3 text-gray-700">{incident.car?.plateNo || 'N/A'}</td>
-                <td className="p-3 text-gray-700">{incident.reportedBy?.name || 'N/A'}</td>
+                <td className="p-3 text-gray-700">
+                  {incident.car?.plateNo || "N/A"}
+                </td>
+                <td className="p-3 text-gray-700">
+                  {incident.reportedBy?.name || "N/A"}
+                </td>
                 <td className="p-3 text-gray-700">
                   <span
                     className={`px-2 py-1 rounded-full text-white text-sm ${getSeverityClass(
@@ -159,16 +192,18 @@ export default function IncidentsPage() {
                 </td>
                 <td className="p-3">
                   <span
-                    className={`px-2 py-1 rounded-full text-sm ${getStatusClass(incident.status)}`}
+                    className={`px-2 py-1 rounded-full text-sm ${getStatusClass(
+                      incident.status
+                    )}`}
                   >
-                    {incident.status.replace('_', ' ')}
+                    {incident.status.replace("_", " ")}
                   </span>
                 </td>
-                <td>
-  {incident.occurredAt 
-    ? new Date(incident.occurredAt).toLocaleString() 
-    : 'N/A'}
-</td>
+                <td className="text-black">
+                  {incident.occurredAt
+                    ? new Date(incident.occurredAt).toLocaleString()
+                    : "N/A"}
+                </td>
                 <td className="p-3 flex gap-2">
                   <Link
                     href={`/fleetmanager/incidents/${incident.id}`}
@@ -187,7 +222,7 @@ export default function IncidentsPage() {
                     disabled={deletingId === incident.id}
                     className="text-red-600 hover:underline disabled:opacity-50"
                   >
-                    {deletingId === incident.id ? 'Deleting...' : 'Delete'}
+                    {deletingId === incident.id ? "Deleting..." : "Delete"}
                   </button>
                 </td>
               </tr>
@@ -204,8 +239,8 @@ export default function IncidentsPage() {
               onClick={() => setCurrentPage(page)}
               className={`px-3 py-1 rounded ${
                 currentPage === page
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-800 hover:bg-black-900'
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-800 hover:bg-black-900"
               }`}
             >
               {page}

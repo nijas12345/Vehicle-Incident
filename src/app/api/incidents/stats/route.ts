@@ -1,5 +1,6 @@
 import { prisma } from '../../../../../lib/prisma';
 import { NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 
 export async function GET(req: Request) {
   try {
@@ -10,7 +11,7 @@ export async function GET(req: Request) {
     const startDate = start ? new Date(start) : undefined;
     const endDate = end ? new Date(end) : undefined;
 
-    const createdAtFilter: any = {};
+    const createdAtFilter: Prisma.DateTimeFilter = {};
     if (startDate) createdAtFilter.gte = startDate;
     if (endDate) createdAtFilter.lte = endDate;
 

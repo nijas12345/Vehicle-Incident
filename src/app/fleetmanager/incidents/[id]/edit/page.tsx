@@ -11,6 +11,8 @@ import {
 
 import { incidentSchema } from '../../../../../../constants/incidentValidation';
 import { SEVERITY_LEVELS, STATUS_OPTIONS, INCIDENT_TYPES } from '../../../../../../constants/incidents'
+import { User } from '@prisma/client';
+import { IncidentBody } from '../../../../../../constants/interface';
 
 export default function UpdateIncidentPage() {
   const router = useRouter();
@@ -22,10 +24,10 @@ export default function UpdateIncidentPage() {
   const { data: users = [], isLoading: usersLoading } = useUsers();
   const mutation = useUpdateIncident();
 
-  const fleetManager = users.find((u: any) => u.role === 'FleetManager');
-  const nonFleetUsers = users.filter((u: any) => u.role !== 'FleetManager');
+  const fleetManager = users.find((u: User) => u.role === 'FleetManager');
+  const nonFleetUsers = users.filter((u: User) => u.role !== 'FleetManager');
 
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<IncidentBody>>({});
 
   useEffect(() => {
     if (incident) {

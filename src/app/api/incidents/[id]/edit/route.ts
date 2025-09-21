@@ -1,0 +1,27 @@
+    import {prisma} from '../../../../../../lib/prisma'
+    import { NextResponse } from 'next/server';
+
+export async function PUT(req: Request, context: { params: { id: string } }) {
+  const { params } = await context;
+  const incidentId = Number(params.id);
+  const body = await req.json();
+
+  const updatedIncident = await prisma.incident.update({
+    where: { id: incidentId },
+    data: {
+      title: body.title,
+      description: body.description,
+      severity: body.severity,
+      type: body.type,
+      status: body.status,
+      carId: body.carId,
+      reportedById: body.reportedById,
+      assignedToId: body.assignedToId,
+      occurredAt: new Date(body.occurredAt),
+      location: body.location,
+    },
+  });
+
+  return NextResponse.json(updatedIncident);
+}
+

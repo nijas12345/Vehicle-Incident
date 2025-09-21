@@ -1,0 +1,25 @@
+export enum IncidentSeverity {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL',
+}
+
+export enum IncidentStatus {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  RESOLVED = 'RESOLVED',
+  CLOSED = 'CLOSED',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum IncidentType {
+  ACCIDENT = 'ACCIDENT',
+  BREAKDOWN = 'BREAKDOWN',
+  THEFT = 'THEFT',
+  VANDALISM = 'VANDALISM',
+  MAINTENANCE_ISSUE = 'MAINTENANCE_ISSUE',
+  TRAFFIC_VIOLATION = 'TRAFFIC_VIOLATION',
+  FUEL_ISSUE = 'FUEL_ISSUE',
+  OTHER = 'OTHER',
+}

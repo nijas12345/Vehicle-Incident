@@ -4,6 +4,33 @@ import { useIncidents, useDeleteIncident } from '../../../../lib/queries/inciden
 import Link from 'next/link';
 import { useState } from 'react';
 import { getStatusClass, getSeverityClass } from '../../../../constants/incidents';
+import { User } from '@prisma/client';
+
+export interface IncidentTableRow {
+  id: number;
+  title: string;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'; // match SEVERITY_LEVELS
+  type: 'ACCIDENT' | 'BREAKDOWN' | 'OTHER'; // match INCIDENT_TYPES
+  status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED'; // match STATUS_OPTIONS
+  occurredAt?: string;
+  car?: {
+    id: number;
+    plateNo: string;
+    model: string;
+    year: number;
+  };
+  reportedBy?: {
+    id: number;
+    name: string;
+    role: string;
+  };
+  assignedTo?: {
+    id: number;
+    name: string;
+    role: string;
+  };
+  location?: string;
+}
 
 export default function IncidentsPage() {
   const [selectedSeverity, setSelectedSeverity] = useState<string>('All');
@@ -116,7 +143,7 @@ export default function IncidentsPage() {
             </tr>
           </thead>
           <tbody>
-            {paginatedData?.map((incident: any) => (
+            {paginatedData?.map((incident:IncidentTableRow) => (
               <tr key={incident.id} className="bg-white">
                 <td className="p-3 text-gray-700">{incident.title}</td>
                 <td className="p-3 text-gray-700">{incident.car?.plateNo || 'N/A'}</td>
@@ -137,9 +164,11 @@ export default function IncidentsPage() {
                     {incident.status.replace('_', ' ')}
                   </span>
                 </td>
-                <td className="p-3 text-gray-700">
-                  {new Date(incident.occurredAt).toLocaleString()}
-                </td>
+                <td>
+  {incident.occurredAt 
+    ? new Date(incident.occurredAt).toLocaleString() 
+    : 'N/A'}
+</td>
                 <td className="p-3 flex gap-2">
                   <Link
                     href={`/fleetmanager/incidents/${incident.id}`}

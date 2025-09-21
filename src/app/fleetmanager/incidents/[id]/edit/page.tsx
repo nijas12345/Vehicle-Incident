@@ -12,7 +12,7 @@ import {
 import { incidentSchema } from '../../../../../../constants/incidentValidation';
 import { SEVERITY_LEVELS, STATUS_OPTIONS, INCIDENT_TYPES } from '../../../../../../constants/incidents'
 import { User } from '@prisma/client';
-import { IncidentBody } from '../../../../../../constants/interface';
+import { Car, IncidentBody } from '../../../../../../constants/interface';
 
 export default function UpdateIncidentPage() {
   const router = useRouter();
@@ -47,7 +47,7 @@ export default function UpdateIncidentPage() {
   }, [incident, fleetManager]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev: Partial<IncidentBody>) => ({ ...prev, [e.target.name]: e.target.value }));
   };
  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
@@ -178,7 +178,7 @@ export default function UpdateIncidentPage() {
       className="border bg-black p-2 w-full rounded"
       
     >
-      {cars.map((car: any) => (
+      {cars.map((car: Car) => (
         <option key={car.id} value={car.id}>
           {car.plateNo} - {car.model} ({car.year})
         </option>
@@ -191,7 +191,7 @@ export default function UpdateIncidentPage() {
   <input
     type="text"
     value={
-      nonFleetUsers.find((u: any) => u.id === formData.reportedById)?.name || ""
+      nonFleetUsers.find((u: User) => u.id === formData.reportedById)?.name || ""
     }
     disabled
     className="border bg-brown p-2 w-full rounded bg-black cursor-not-allowed"
@@ -209,7 +209,7 @@ export default function UpdateIncidentPage() {
       className="border bg-black p-2 w-full rounded"
       
     >
-      {nonFleetUsers.map((user: any) => (
+      {nonFleetUsers.map((user: User) => (
         <option key={user.id} value={user.id}>
           {user.name} ({user.role})
         </option>

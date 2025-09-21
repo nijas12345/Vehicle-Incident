@@ -1,36 +1,165 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vehicle Incident Management App
+
+This is a **Vehicle Incident Management System** built with **Next.js (App Router)**, **Prisma ORM**, and **MongoDB (NeoDB)**.  
+It allows fleet managers to track, report, and manage vehicle incidents efficiently with features like filtering, dashboards, CRUD operations, and user assignment.
+
+---
+
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [API Endpoints](#api-endpoints)
+- [Frontend](#frontend)
+- [Backend](#backend)
+- [Deployment](#deployment)
+- [License](#license)
+- [Notes](#notes)
+
+---
+
+## Project Overview
+
+The Vehicle Incident App allows users to:
+
+- Log incidents for fleet vehicles.
+- Assign incidents to specific team members.
+- Track status and severity of incidents.
+- Filter incidents by severity, status, assigned user, or vehicle.
+- View detailed incident pages with updates, images, and documents.
+- Manage incidents through a dashboard with statistics.
+- Track incident occurrence dates and reporting users.
+
+---
+
+## Tech Stack
+
+- **Frontend:** Next.js (React, TypeScript, Tailwind CSS)  
+- **Backend:** Next.js API routes  
+- **Database:** MongoDB (NeoDB) with Prisma ORM  
+- **State Management:** React Query (for fetching, caching, and mutation)  
+- **Authentication:** JWT and Google OAuth  
+- **Real-time updates:** WebSocket.io (for project management features)  
+
+---
+
+## Features
+
+### Incident Management
+- Create, update, delete incidents
+- Assign incidents to users (`assignedTo`)
+- Upload images and documents per incident
+- Track `clockIn` and `clockOut` times for users
+
+### Filters & Pagination
+- Filter incidents by:
+  - Severity (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`)
+  - Status (`PENDING`, `IN_PROGRESS`, `CLOSED`, `RESOLVED`, `CANCELLED`)
+  - Car
+  - Assigned user
+- Paginated incident listing
+
+### Dashboard
+- Overview of incidents by status and severity
+- Reports for user productivity and incident counts
+
+### Frontend Components
+- Incident table for desktop and mobile
+- Form for adding/editing incidents
+- Dynamic assigned-to dropdown
+- Image preview with delete option
+- Responsive layout with Tailwind CSS
+
+### Backend
+- Prisma models for `Incident`, `User`, `Car`, `Updates`
+- CRUD APIs for incidents
+- Filter and search APIs
+- Real-time updates for incident changes (optional for future)
+
+---
+
+## Project Structure
+
+├─ app/ # Next.js App Router pages
+│ ├─ fleetmanager/
+│ │ ├─ incidents/
+│ │ │ ├─ [id]/ # Incident details & edit pages
+│ │ │ ├─ new/ # Add new incident page
+│ │ │ ├─ page.tsx # Incident list page
+│ │ │ └─ stats/ # Dashboard page
+├─ components/ # React UI components (Tables, Modals, Inputs)
+├─ constants/ # Interfaces and enums
+├─ lib/ # Utilities and database setup (Prisma)
+├─ prisma/ # Prisma schema and migrations
+├─ public/ # Static assets (images, fonts)
+├─ styles/ # Tailwind & global styles
+├─ package.json # Dependencies & scripts
+
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
+### Install Dependencies
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Build for Production
+npm run build
+npm run start
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+API Endpoints
+Incident APIs
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+GET /api/incidents – List incidents with optional filters (status, severity, carId, assignedToId)
 
-## Learn More
+POST /api/incidents – Create a new incident
 
-To learn more about Next.js, take a look at the following resources:
+PUT /api/incidents/:id/edit – Update an incident
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+DELETE /api/incidents/:id – Delete an incident
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+User APIs
 
-## Deploy on Vercel
+GET /api/users – List users for assignment dropdown
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+POST /api/auth/google – Google OAuth authentication
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Car APIs
+
+GET /api/cars – List all cars
+
+Frontend Details
+
+React Query for API fetching and caching
+
+Tailwind CSS for styling
+
+Next.js dynamic routing for incident details pages
+
+Form validation with TypeScript interfaces
+
+Image preview and upload handling
+
+Backend Details
+
+Prisma ORM for database modeling
+
+MongoDB (NeoDB) for storing incidents, users, cars, updates
+
+Enum support for severity and status
+
+Filtering and pagination support in APIs
+
+Error handling using NextResponse.json
+
+Notes
+
+This app is built with Next.js App Router.
+
+Implements assignedTo feature for incidents.
+
+Includes image/document uploads and preview functionality.
+
+Fully typed with TypeScript and optimized with React Query.

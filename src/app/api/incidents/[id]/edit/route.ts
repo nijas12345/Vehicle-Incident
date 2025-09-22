@@ -1,9 +1,12 @@
-    import {prisma} from '../../../../../../lib/prisma'
-    import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '../../../../../../lib/prisma';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function PUT(req: NextRequest, context: { params: { id: string } }) {
-  const { params } = await context;
-  const incidentId = Number(params.id);
+export async function PUT(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  const { id } = context.params; // <-- just use context.params directly
+  const incidentId = Number(id);
   const body = await req.json();
 
   const updatedIncident = await prisma.incident.update({
@@ -24,4 +27,3 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 
   return NextResponse.json(updatedIncident);
 }
-

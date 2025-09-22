@@ -27,7 +27,6 @@ export async function GET(
   if (!incident) {
     return NextResponse.json({ error: 'Incident not found' }, { status: 404 });
   }
-
   return NextResponse.json(incident);
 }
 

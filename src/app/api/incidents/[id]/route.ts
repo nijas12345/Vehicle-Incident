@@ -31,7 +31,7 @@ export async function GET(
   return NextResponse.json(incident);
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const incidentId = Number(params.id);
 

@@ -159,36 +159,72 @@ export default function IncidentsPage() {
       </div>
 
       {/* Mobile: Card-based layout */}
-      <div className="md:hidden flex flex-col gap-4">
-        {paginatedData?.map((incident: IncidentTableRow) => (
-          <div key={incident.id} className="bg-white p-4 shadow rounded-lg">
-            <h2 className="font-bold text-lg mb-2">{incident.title}</h2>
-            <p><span className="font-semibold">Car:</span> {incident.car?.plateNo || "N/A"}</p>
-            <p><span className="font-semibold">Reported By:</span> {incident.reportedBy?.name || "N/A"}</p>
-            <p><span className="font-semibold">Assigned To:</span> {incident.assignedTo?.name || "N/A"}</p>
-            <p>
-              <span className="font-semibold">Severity:</span>{" "}
-              <span className={`px-2 py-1 rounded-full text-white text-sm ${getSeverityClass(incident.severity)}`}>
-                {incident.severity}
-              </span>
-            </p>
-            <p>
-              <span className="font-semibold">Status:</span>{" "}
-              <span className={`px-2 py-1 rounded-full text-sm ${getStatusClass(incident.status)}`}>
-                {incident.status.replace("_", " ")}
-              </span>
-            </p>
-            <p><span className="font-semibold">Occurred At:</span> {incident.occurredAt ? new Date(incident.occurredAt).toLocaleString() : "N/A"}</p>
-            <div className="flex gap-2 mt-2 flex-wrap">
-              <Link href={`/fleetmanager/incidents/${incident.id}`} className="text-blue-600 hover:underline">View</Link>
-              <Link href={`/fleetmanager/incidents/${incident.id}/edit`} className="text-green-600 hover:underline">Edit</Link>
-              <button onClick={() => handleDelete(incident.id)} disabled={deletingId === incident.id} className="text-red-600 hover:underline disabled:opacity-50">
-                {deletingId === incident.id ? "Deleting..." : "Delete"}
-              </button>
-            </div>
-          </div>
-        ))}
+    <div className="md:hidden flex flex-col gap-4">
+  {paginatedData?.map((incident: IncidentTableRow) => (
+    <div key={incident.id} className="bg-gray-50 p-4 shadow-md rounded-lg border border-gray-200">
+      <h2 className="font-bold text-lg mb-2 text-black">{incident.title}</h2> {/* title is black */}
+
+      <p>
+        <span className="font-semibold text-black">Car:</span>{" "}
+        <span className="text-black">{incident.car?.plateNo || "N/A"}</span>
+      </p>
+
+      <p>
+        <span className="font-semibold text-black">Reported By:</span>{" "}
+        <span className="text-black">{incident.reportedBy?.name || "N/A"}</span>
+      </p>
+
+      <p>
+        <span className="font-semibold text-black">Assigned To:</span>{" "}
+        <span className="text-black">{incident.assignedTo?.name || "N/A"}</span>
+      </p>
+
+      <p>
+        <span className="font-semibold text-black">Severity:</span>{" "}
+        <span className={`px-2 py-1 rounded-full text-white text-sm ${getSeverityClass(incident.severity)}`}>
+          {incident.severity}
+        </span>
+      </p>
+
+      <p>
+        <span className="font-semibold text-black">Status:</span>{" "}
+        <span className={`px-2 py-1 rounded-full text-sm ${getStatusClass(incident.status)}`}>
+          {incident.status.replace("_", " ")}
+        </span>
+      </p>
+
+      <p>
+        <span className="font-semibold text-black">Occurred At:</span>{" "}
+        <span className="text-black">{incident.occurredAt ? new Date(incident.occurredAt).toLocaleString() : "N/A"}</span>
+      </p>
+
+      <div className="flex gap-2 mt-2 flex-wrap">
+        <Link
+          href={`/fleetmanager/incidents/${incident.id}`}
+          className="text-blue-600 hover:underline"
+        >
+          View
+        </Link>
+        <Link
+          href={`/fleetmanager/incidents/${incident.id}/edit`}
+          className="text-green-600 hover:underline"
+        >
+          Edit
+        </Link>
+        <button
+          onClick={() => handleDelete(incident.id)}
+          disabled={deletingId === incident.id}
+          className="text-red-600 hover:underline disabled:opacity-50"
+        >
+          {deletingId === incident.id ? "Deleting..." : "Delete"}
+        </button>
       </div>
+    </div>
+  ))}
+</div>
+
+
+
 
       {/* Pagination */}
       {totalPages > 1 && (

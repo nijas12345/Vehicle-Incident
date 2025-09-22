@@ -41,3 +41,29 @@ export type IncidentType =
   | 'FUEL_ISSUE'
   | 'OTHER';
 
+
+export interface IncidentTableRow {
+  id: number;
+  title: string;
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"; // match SEVERITY_LEVELS
+  type: "ACCIDENT" | "BREAKDOWN" | "OTHER"; // match INCIDENT_TYPES
+  status: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED"; // match STATUS_OPTIONS
+  occurredAt?: string;
+  car?: {
+    id: number;
+    plateNo: string;
+    model: string;
+    year: number;
+  };
+  reportedBy?: {
+    id: number;
+    name: string;
+    role: string;
+  };
+  assignedTo?: {
+    id: number;
+    name: string;
+    role: string;
+  };
+  location?: string;
+}

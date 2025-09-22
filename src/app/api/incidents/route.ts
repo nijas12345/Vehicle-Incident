@@ -1,9 +1,10 @@
 import { prisma } from "../../../../lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { IncidentBody } from "../../../../constants/interface";
+import { Prisma, IncidentStatus, IncidentSeverity } from "@prisma/client";
 
 // GET /api/incidents?status=&severity=&carId=&assignedToId=
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
@@ -12,9 +13,16 @@ export async function GET(req: Request) {
     const carId = searchParams.get("carId");
     const assignedToId = searchParams.get("assignedToId");
 
-    const where: any = {};
-    if (status) where.status = status;
-    if (severity) where.severity = severity;
+    const where: Prisma.IncidentWhereInput = {};
+
+    // Validate and assign enum values
+    if (status && Object.values(IncidentStatus).includes(status as IncidentStatus)) {
+      where.status = status as IncidentStatus;
+    }
+    if (severity && Object.values(IncidentSeverity).includes(severity as IncidentSeverity)) {
+      where.severity = severity as IncidentSeverity;
+    }
+
     if (carId) where.carId = Number(carId);
     if (assignedToId) where.assignedToId = Number(assignedToId);
 
@@ -37,7 +45,9 @@ export async function GET(req: Request) {
     );
   }
 }
-export async function POST(req: Request) {
+
+// POST /api/incidents
+export async function POST(req: NextRequest) {
   try {
     const body: IncidentBody = await req.json();
 
@@ -45,8 +55,8 @@ export async function POST(req: Request) {
       data: {
         title: body.title,
         description: body.description,
-        severity: body.severity, // string literal matches Prisma enum
-        status: body.status ?? "PENDING",
+        severity: body.severity as IncidentSeverity,
+        status: body.status ? (body.status as IncidentStatus) : IncidentStatus.PENDING,
         type: body.type ?? "OTHER",
         carId: body.carId,
         reportedById: body.reportedById,

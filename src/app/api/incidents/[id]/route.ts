@@ -1,8 +1,8 @@
 import { prisma } from '../../../../../lib/prisma';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
-  req: Request,
+  req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params; 
@@ -29,4 +29,26 @@ export async function GET(
   }
 
   return NextResponse.json(incident);
+}
+
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+  try {
+    const incidentId = Number(params.id);
+
+    if (isNaN(incidentId)) {
+      return NextResponse.json({ error: 'Invalid incident ID' }, { status: 400 });
+    }
+
+    // Delete the incident
+    const deletedIncident = await prisma.incident.delete({
+      where: { id: incidentId },
+    });
+
+    return NextResponse.json(deletedIncident);
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to delete incident', details: error },
+      { status: 500 }
+    );
+  }
 }

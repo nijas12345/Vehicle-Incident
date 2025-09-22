@@ -1,7 +1,7 @@
     import {prisma} from '../../../../../../lib/prisma'
-    import { NextResponse } from 'next/server';
+    import { NextRequest, NextResponse } from 'next/server';
 
-export async function PUT(req: Request, context: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
   const { params } = await context;
   const incidentId = Number(params.id);
   const body = await req.json();

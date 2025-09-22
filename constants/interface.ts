@@ -67,3 +67,22 @@ export interface IncidentTableRow {
   };
   location?: string;
 }
+
+export interface IncidentStats {
+  total: number;
+  openIncidents: number;
+  byStatus: Record<string, number>;
+  bySeverity: Record<string, number>;
+}
+
+export interface Incident {
+  title: string;
+  description: string;
+  severity: string;
+  type: string;
+  carId?: number;
+  assignedToId?: number;
+  occurredAt?: Date;
+  location?: string;
+  images?:string[]
+}

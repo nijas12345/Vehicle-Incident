@@ -1,18 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../api-client';
 import { keepPreviousData } from '@tanstack/react-query';
-
-interface Incident {
-  title: string;
-  description: string;
-  severity: string;
-  type: string;
-  carId?: number;
-  assignedToId?: number;
-  occurredAt?: Date;
-  location?: string;
-  images?:string[]
-}
+import { IncidentStats } from '../../constants/interface';
+import { Incident } from '../../constants/interface';
 
 export const fetchIncidents = async (filters: { severity?: string; status?: string }) => {
   const params = new URLSearchParams();
@@ -122,12 +112,7 @@ export const useDeleteIncident = () => {
 };
 
 
-export interface IncidentStats {
-  total: number;
-  openIncidents: number;
-  byStatus: Record<string, number>;
-  bySeverity: Record<string, number>;
-}
+
 
 // Fetch function
 export const fetchIncidentStats = async (
